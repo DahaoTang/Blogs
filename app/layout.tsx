@@ -26,7 +26,7 @@ export default function RootLayout({
 						<div className="sticky bottom-0 z-10 h-[42px] pb-3 pt-2 flex items-center justify-center bg-white">
 							<a
 								className="hover:text-neutral-800 hover:font-bold hover:underline"
-								href="./"
+								href="https://blog.dahaotang.com/"
 								// target="_blank"
 								// rel="noopener noreferrer"
 							>
