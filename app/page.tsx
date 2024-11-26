@@ -6,8 +6,6 @@ import {
 	TableBody,
 	TableRow,
 	TableCell,
-	TableHeader,
-	TableHead,
 } from "@/components/ui/table";
 
 type Blog = {
