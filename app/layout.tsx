@@ -26,9 +26,9 @@ export default function RootLayout({
 						<div className="sticky bottom-0 z-10 h-[42px] pb-3 pt-2 flex items-center justify-center bg-white">
 							<a
 								className="hover:text-neutral-800 hover:font-bold hover:underline"
-								href="/"
-								target="_blank"
-								rel="noopener noreferrer"
+								href="./"
+								// target="_blank"
+								// rel="noopener noreferrer"
 							>
 								&nbsp;Blog Main Page&nbsp;
 							</a>
@@ -36,8 +36,8 @@ export default function RootLayout({
 							<a
 								className="hover:text-rose-300"
 								href="https://dahaotang.com/"
-								target="_blank"
-								rel="noopener noreferrer"
+								// target="_blank"
+								// rel="noopener noreferrer"
 							>
 								&nbsp;Dahao Tang&nbsp;
 							</a>
