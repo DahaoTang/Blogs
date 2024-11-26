@@ -60,7 +60,7 @@ export default function HomePage() {
 
 	return (
 		<main className="container mx-auto p-6">
-			<div className="text-xl font-bold mb-6">Dahao&apos;s Blog</div>
+			<div className="text-xl font-bold mb-6">Dahao&apos;s Blogs</div>
 			<Table>
 				<TableBody>
 					{blogs.map((blog) => (
