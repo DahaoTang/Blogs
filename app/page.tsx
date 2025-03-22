@@ -1,12 +1,7 @@
 import fs from "fs";
 import path from "path";
 import Link from "next/link";
-import {
-	Table,
-	TableBody,
-	TableRow,
-	TableCell,
-} from "@/components/ui/table";
+import { Table, TableBody, TableRow, TableCell } from "@/components/ui/table";
 
 type Blog = {
 	slug: string;
@@ -60,7 +55,17 @@ export default function HomePage() {
 
 	return (
 		<main className="container mx-auto p-6">
-			<div className="text-xl font-bold mb-6"><a className="hover:text-rose-300" href="https://dahaotang.com/">Dahao</a>&apos;s Blogs</div>
+			<div className="text-xl font-bold mb-6">
+				<a
+					className="hover:text-rose-300"
+					href="https://dahaotang.com/"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					Dahao
+				</a>
+				&apos;s Blogs
+			</div>
 			<Table>
 				<TableBody>
 					{blogs.map((blog) => (

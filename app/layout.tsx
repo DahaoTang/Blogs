@@ -27,17 +27,15 @@ export default function RootLayout({
 							<a
 								className="hover:text-neutral-800 hover:font-bold hover:underline"
 								href="https://blog.dahaotang.com/"
-								// target="_blank"
-								// rel="noopener noreferrer"
 							>
 								&nbsp;Blog Main Page&nbsp;
 							</a>
-              | Developed by
+							| Developed by
 							<a
 								className="hover:text-rose-300"
 								href="https://dahaotang.com/"
-								// target="_blank"
-								// rel="noopener noreferrer"
+								target="_blank"
+								rel="noopener noreferrer"
 							>
 								&nbsp;Dahao Tang&nbsp;
 							</a>
