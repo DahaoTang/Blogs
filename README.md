@@ -18,4 +18,7 @@ This website is built using:
 
 This project renders markdown files into web pages to boost the process of writing and posting blogs.
 
-To create a new post, simply add a new folder under `./public/blogs/<Name_of_the_Blog>`. Inside the folder, create a markdown file `main.md` to write the blog. If the blog contains images or other resources, simply create a folder called `assets` at the same level as the `main.md` file for storing the resources.
+To create a new post:
+1. Add a new folder under `./public/blogs/<Name_of_the_Blog>`. 
+2. Inside the folder, create a markdown file `main.md` to write the blog. If the blog contains images or other resources, simply create a folder called `assets` at the same level as the `main.md` file for storing the resources. 
+3. Update the `public/blog/blogs.json` file.
