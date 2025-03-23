@@ -2,5 +2,13 @@
 	{
 		"slug": "Reflection_On_Reflections",
 		"date": "2024-5-21"
+	},
+	{
+		"slug": "Instructions_for_Setting_Up_oh-my-zsh",
+		"date": "2023-6-2"
+	},
+	{
+		"slug": "NeoVim_Init",
+		"date": "2022-10-3"
 	}
 ]
