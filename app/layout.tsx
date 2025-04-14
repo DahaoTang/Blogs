@@ -1,49 +1,35 @@
 import type { Metadata } from "next";
-import { Noto_Sans } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const noto_sans = Noto_Sans({
-	subsets: ["latin"],
-	display: "swap",
+const jbm = JetBrains_Mono({
+  weight: "500",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-	title: "Dahao Blog",
-	description: "Dahao's Blog",
+  title: "Dahao's Blogs",
+  description: "Dahao Tang's Blog Website",
 };
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang="en">
-			<body className={`${noto_sans.className}`}>
-				<div className="flex justify-center text-neutral-900 text-sm">
-					<div className="min-w-screen max-w-[812px] w-full min-h-screen flex flex-col bg-white">
-						<main className="flex-grow p-10">{children}</main>
-						<div className="sticky bottom-0 z-10 h-[42px] pb-3 pt-2 flex items-center justify-center bg-white">
-							<a
-								className="hover:text-neutral-800 hover:font-bold hover:underline"
-								href="https://blog.dahaotang.com/"
-							>
-								&nbsp;Blog Main Page&nbsp;
-							</a>
-							| Developed by
-							<a
-								className="hover:text-rose-300"
-								href="https://dahaotang.com/"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								&nbsp;Dahao Tang&nbsp;
-							</a>
-							| 2025
-						</div>
-					</div>
-				</div>
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+      </head>
+      <body className={`${jbm.className}`}>
+        <div className="min-h-screen flex justify-center bg-green-500">
+          <div className="min-w-[400px] max-w-[812px] w-full text-sm text-neutral-900 bg-white">
+            {/* <main className="pt-10 xl:pl-30 lg:pl-25 md:pl-20 pl-15 pr-15"> */}
+            <main className="p-5">{children}</main>
+          </div>
+        </div>
+      </body>
+    </html>
+  );
 }

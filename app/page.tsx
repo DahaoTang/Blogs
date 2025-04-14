@@ -1,85 +1,78 @@
 import fs from "fs";
 import path from "path";
 import Link from "next/link";
-import { Table, TableBody, TableRow, TableCell } from "@/components/ui/table";
+import Headbar from "./components/headbar";
 
-type Blog = {
-	slug: string;
-	title: string;
-	date: string;
-};
+type BlogPost = { id: string; name: string };
 
-const getBlogs = (): Blog[] => {
-	const blogsDir = path.join(process.cwd(), "public", "blogs");
-	const metadataPath = path.join(blogsDir, "blogs.json");
+export default function Home() {
+  const blogsDir = path.join(process.cwd(), "public", "blogs");
 
-	if (!fs.existsSync(blogsDir)) {
-		throw new Error(`Blogs directory not found at ${blogsDir}`);
-	}
+  const blogFolders = fs
+    .readdirSync(blogsDir, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
 
-	if (!fs.existsSync(metadataPath)) {
-		throw new Error(`Metadata file not found at ${metadataPath}`);
-	}
+  const blogPosts = blogFolders
+    .map<BlogPost | null>((folder) => {
+      const folderPath = path.join(blogsDir, folder);
+      const files = fs.readdirSync(folderPath, { withFileTypes: true });
+      const mdFile = files.find(
+        (file) => file.isFile() && file.name.endsWith(".md")
+      );
+      if (mdFile) {
+        const name = mdFile.name.replace(/\.md$/, "");
+        return { id: folder, name };
+      }
+      return null;
+    })
+    .filter((post): post is BlogPost => post !== null)
+    .reverse();
 
-	// Read metadata from blogs.json
-	const metadata: { slug: string; date: string }[] = JSON.parse(
-		fs.readFileSync(metadataPath, "utf8")
-	);
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
-	// For each blog, read the title from main.md
-	const blogs: Blog[] = metadata.map((meta) => {
-		const markdownPath = path.join(blogsDir, meta.slug, "main.md");
-		if (!fs.existsSync(markdownPath)) {
-			throw new Error(`Markdown file not found for blog: ${meta.slug}`);
-		}
-
-		// Read the first line as the title
-		const fileContent = fs.readFileSync(markdownPath, "utf8");
-		const title = fileContent.split("\n")[0].replace(/^#\s*/, "").trim(); // Extract title
-
-		return {
-			slug: meta.slug,
-			title,
-			date: meta.date,
-		};
-	});
-
-	// Sort blogs by date (newest first)
-	return blogs.sort(
-		(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-	);
-};
-
-export default function HomePage() {
-	const blogs = getBlogs();
-
-	return (
-		<main className="container mx-auto p-6">
-			<div className="text-xl font-bold mb-6">
-				<a
-					className="hover:text-rose-300"
-					href="https://dahaotang.com/"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Dahao
-				</a>
-				&apos;s Blogs
-			</div>
-			<Table>
-				<TableBody>
-					{blogs.map((blog) => (
-						<TableRow key={blog.slug} className="cursor-pointer">
-							<TableCell>
-								<Link href={`/blog/${blog.slug}`} className="hover:underline">
-									{blog.title}
-								</Link>
-							</TableCell>
-							<TableCell>{blog.date}</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
-		</main>
-	);
+  return (
+    <div className="bg-red-300">
+      <div className="text-xl font-bold">Dahao&apos;s Blogs</div>
+      <div className="pt-5 pb-5">
+        <Headbar />
+      </div>
+      <div>
+        <ul className="space-y-2">
+          {blogPosts.map((post) => {
+            const year = post.id.substring(0, 4);
+            const monthNum = post.id.substring(4, 6);
+            const day = post.id.substring(6, 8);
+            const monthName =
+              monthNames[parseInt(monthNum, 10) - 1] || monthNum;
+            const displayName = post.name.replace(/_/g, " ");
+            return (
+              <li key={`${post.id}-${post.name}`}>
+                {day} {monthName}, {year} &nbsp;&nbsp;
+                <Link
+                  href={`/blog/${post.id}/`}
+                  className="text-blue-600 hover:underline"
+                >
+                  {displayName}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+  );
 }
