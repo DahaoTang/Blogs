@@ -64,7 +64,7 @@ export default function Home() {
                 {day} {monthName}, {year} &nbsp;&nbsp;
                 <Link
                   href={`/blog/${post.id}/`}
-                  className="text-blue-600 hover:underline"
+                  className="text-blue-600"
                 >
                   {displayName}
                 </Link>
