@@ -5,7 +5,7 @@ export default function Headbar() {
         About
       </a>
       <a className="" href="/">
-        Blogs
+        Blog
       </a>
     </div>
   );

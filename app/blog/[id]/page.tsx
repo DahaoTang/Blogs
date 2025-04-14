@@ -12,7 +12,7 @@ export default async function BlogPost({ params }: { params: Params }) {
   const resolvedParams = await params;
   const { id } = resolvedParams;
 
-  const blogFolder = path.join(process.cwd(), "public", "blogs", id);
+  const blogFolder = path.join(process.cwd(), "public", "blog", id);
 
   try {
     const files = await fs.readdir(blogFolder, { withFileTypes: true });
@@ -27,13 +27,13 @@ export default async function BlogPost({ params }: { params: Params }) {
     const name = mdFile.name.replace(/\.md$/, "");
     const mdPath = path.join(blogFolder, mdFile.name);
     const markdownContent = await fs.readFile(mdPath, "utf-8");
-    const baseUrl = `/blogs/${id}/${name}.assets/`;
+    const baseUrl = `/blog/${id}/${name}.assets/`;
     const htmlContent = parseMarkdown(markdownContent, baseUrl);
 
     return (
       <div>
         <div>
-          <div className="text-xl font-bold">Dahao&apos;s Blogs</div>
+          <div className="text-xl font-bold">Dahao&apos;s Blog</div>
           <div className="pt-5 pb-5">
             <Headbar />
           </div>

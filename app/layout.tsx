@@ -8,7 +8,7 @@ const noto_sans = Noto_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Dahao's Blogs",
+  title: "Dahao's Blog",
   description: "Dahao Tang's Blog Website",
 };
 

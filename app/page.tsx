@@ -6,16 +6,16 @@ import Headbar from "./components/headbar";
 type BlogPost = { id: string; name: string };
 
 export default function Home() {
-  const blogsDir = path.join(process.cwd(), "public", "blogs");
+  const blogDir = path.join(process.cwd(), "public", "blog");
 
   const blogFolders = fs
-    .readdirSync(blogsDir, { withFileTypes: true })
+    .readdirSync(blogDir, { withFileTypes: true })
     .filter((dirent) => dirent.isDirectory())
     .map((dirent) => dirent.name);
 
   const blogPosts = blogFolders
     .map<BlogPost | null>((folder) => {
-      const folderPath = path.join(blogsDir, folder);
+      const folderPath = path.join(blogDir, folder);
       const files = fs.readdirSync(folderPath, { withFileTypes: true });
       const mdFile = files.find(
         (file) => file.isFile() && file.name.endsWith(".md")
@@ -46,7 +46,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="text-xl font-bold">Dahao&apos;s Blogs</div>
+      <div className="text-xl font-bold">Dahao&apos;s Blog</div>
       <div className="pt-5 pb-5">
         <Headbar />
       </div>
