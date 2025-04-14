@@ -161,7 +161,7 @@ export function parseMarkdown(md: string, baseUrl: string = ""): string {
   // 8. Links
   html = html.replace(
     /\[([^\]]+)\]\((.*?)\)/gim,
-    `<a href="$2" class="link text-blue-600 hover:underline" target="_blank">$1</a>`
+    `<a href="$2" class="link text-blue-600" target="_blank">$1</a>`
   );
 
   // 9. Block-level Processing

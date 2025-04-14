@@ -3,7 +3,7 @@ import Headbar from "../components/headbar";
 export default function About() {
   return (
     <div>
-      <div className="text-xl font-bold">Dahao&apos;s Blog</div>
+      <div className="text-xl font-bold">Dahao&apos;s Blogs</div>
       <div className="pt-5 pb-5">
         <Headbar />
       </div>
