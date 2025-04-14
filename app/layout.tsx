@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 
-const jbm = JetBrains_Mono({
-  weight: "500",
+const noto_sans = Noto_Sans({
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -22,10 +22,9 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={`${jbm.className}`}>
-        <div className="min-h-screen flex justify-center bg-green-500">
+      <body className={`${noto_sans.className}`}>
+        <div className="min-h-screen flex justify-center">
           <div className="min-w-[400px] max-w-[812px] w-full text-sm text-neutral-900 bg-white">
-            {/* <main className="pt-10 xl:pl-30 lg:pl-25 md:pl-20 pl-15 pr-15"> */}
             <main className="p-5">{children}</main>
           </div>
         </div>

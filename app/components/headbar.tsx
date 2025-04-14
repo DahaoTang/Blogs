@@ -1,6 +1,6 @@
 export default function Headbar() {
   return (
-    <div className="bg-yellow-300 text-blue-600">
+    <div className="text-blue-600">
       <a className="pr-3" href="/about">
         About
       </a>

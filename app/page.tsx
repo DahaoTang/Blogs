@@ -45,7 +45,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="bg-red-300">
+    <div>
       <div className="text-xl font-bold">Dahao&apos;s Blogs</div>
       <div className="pt-5 pb-5">
         <Headbar />

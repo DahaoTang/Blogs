@@ -1,36 +1,23 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Blog Website
 
-## Getting Started
+**Website:** [blog.dahaotang.com](https://blog.dahaotang.com)
 
-First, run the development server:
+## Introduction
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Welcome to the GitHub repository for my peronsal blog website, [blog.dahaotang.com](https://blog.dahaotang.com). This repository hosts the source code for the first iteration (v1) of the site. The design philosophy focuses on simplicity and providing optimal viewing on devices of varying screen sizes.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This website is built using:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **[Next.js](https://nextjs.org/)**: A React framework for production.
+- **[Tailwind CSS](https://tailwindcss.com/)**: A utility-first CSS framework for rapid UI development.
 
-## Learn More
+## User's Guide
 
-To learn more about Next.js, take a look at the following resources:
+This project renders markdown files into web pages to boost the process of writing and posting blogs.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To create a new post:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Add a new folder under `./public/blogs/<Id_of_the_Blog>`. Id should be in the format of `yyyymmdd<rest of the id>`
+2. Inside the folder, create a markdown file `<Name_of_Blog>.md` to write the blog. If the blog contains images or other resources, create a folder called `<Name_of_Blog>.assets` at the same level as the markdown file for storing the resources.

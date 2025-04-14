@@ -110,7 +110,32 @@ export function parseMarkdown(md: string, baseUrl: string = ""): string {
 
       // 3. Render with horizontal scrolling and copy button moved above the code block.
       // Note: The copy button script now fetches the code block from the nextElementSibling.
-      return `<div class="code-block-container my-2"><div class="text-right mt-1"><button class="copy-btn text-xs text-white border rounded px-2 py-1 mb-1 border-neutral-500 bg-neutral-500 hover:bg-neutral-900 hover:text-green-600 cursor-pointer" onclick="(async function(el){ try { const codeEl = el.parentElement.nextElementSibling.querySelector('code'); const codeText = codeEl ? codeEl.innerText : ''; await navigator.clipboard.writeText(codeText); el.innerText='copied'; setTimeout(() => { el.innerText='copy'; }, 2000); } catch(err) { console.error(err); el.innerText='error'; } })(this)">copy</button></div><pre class="code-block bg-neutral-800 text-neutral-100 p-2 rounded overflow-x-auto"><code class="code-content font-mono text-sm">${codeContentEscaped}</code></pre></div>`;
+      return `
+        <div class="code-block-container my-4">
+          <div class="text-right mt-1">
+            <button
+              class="copy-btn text-xs text-white border rounded px-2 py-1 mb-1
+                    border-neutral-500 bg-neutral-500 hover:border-neutral-900
+                    hover:bg-neutral-900 hover:text-green-600 cursor-pointer"
+              onclick="(async function(el){
+                try {
+                  const codeEl = el.parentElement.nextElementSibling.querySelector('code');
+                  const codeText = codeEl ? codeEl.innerText : '';
+                  await navigator.clipboard.writeText(codeText);
+                  el.innerText='copied';
+                  setTimeout(() => { el.innerText='copy'; }, 2000);
+                } catch(err) {
+                  console.error(err);
+                  el.innerText='error';
+                }
+              })(this)"
+            >
+              copy
+            </button>
+          </div>
+          <pre class="code-block bg-neutral-800 text-neutral-100 p-2 rounded overflow-x-auto"><code class="code-content font-mono text-sm">${codeContentEscaped}</code></pre>
+        </div>
+      `.trim();
     }
   );
 
@@ -169,7 +194,7 @@ export function parseMarkdown(md: string, baseUrl: string = ""): string {
       // Normal paragraph
       let normalized = trimmed.replace(/  \n/g, "<br />");
       normalized = normalized.replace(/\n/g, " ");
-      return `<p class="paragraph break-all my-2">${normalized}</p>`;
+      return `<p class="paragraph break-word my-2">${normalized}</p>`;
     })
     .join("");
 

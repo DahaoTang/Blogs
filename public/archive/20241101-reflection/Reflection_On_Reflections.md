@@ -4,17 +4,17 @@
 
 I rewatched [Andrew’s talk at Sequoia](https://www.youtube.com/watch?v=sal78ACtGTc&t=197s) these two days and have gained new attention to the topics of **Reflection** and **Multi-agent Collaboration**. In this post, I will focus on the first topic, **Reflection**.
 
----
-
 ## Key Takeaways
 
 - Reflection is a prompt design pattern rather than a system design pattern.
-- The idea of Reflection was brought to light by Wei et al. (2023) as **Chain-of-Thoughts (CoT)**, which is typically created by taking eight exemplars from the training set and decomposing the reasoning process into multiple steps leading to the final answer.
-- Inspired by CoT, Madaan et al. (2024) introduced the idea of **Self-Refine**, which is achieved by generating an initial output using an LLM and then using the same LLM to provide feedback for its output, refining itself iteratively.
-- A novel framework, **Reflexion**, introduced by Shinn et al. (2024), reinforces language agents not by updating weights but through linguistic feedback.
-- All of these techniques achieved **SOTA** at some given task by the time they were introduced.
 
----
+- The idea of Reflection was brought to light by Wei et al. (2023) as **Chain-of-Thoughts (CoT)**, which is typically created by taking eight exemplars from the training set and decomposing the reasoning process into multiple steps leading to the final answer.
+
+- Inspired by CoT, Madaan et al. (2024) introduced the idea of **Self-Refine**, which is achieved by generating an initial output using an LLM and then using the same LLM to provide feedback for its output, refining itself iteratively.
+
+- A novel framework, **Reflexion**, introduced by Shinn et al. (2024), reinforces language agents not by updating weights but through linguistic feedback.
+
+- All of these techniques achieved **SOTA** at some given task by the time they were introduced.
 
 ## Detailed Analysis
 
@@ -28,6 +28,7 @@ CoT combines two key ideas to unlock reasoning abilities in LLMs:
 CoT overcomes these limitations:
 
 - Creating large sets of high-quality rationales is costly.
+
 - Traditional few-shot prompting struggles with reasoning tasks and doesn’t scale well.
 
 Wei et al. (2023) typically created chain-of-thought annotations using eight exemplars from the training set, breaking reasoning processes into multiple steps leading to the final answer.
@@ -35,8 +36,6 @@ Wei et al. (2023) typically created chain-of-thought annotations using eight exe
 **Example of CoT Annotations:**
 
 ![Wei et al. 2024](./cot-exemplar.png)
-
----
 
 ### Self-Refine
 
@@ -52,6 +51,7 @@ Steps:
 Key considerations:
 
 - Feedback must be **actionable** (clear steps for improvement).
+
 - Feedback must be **specific** (identify exact areas needing change).
 
 **Self-Refine Illustration:**
@@ -62,15 +62,13 @@ Key considerations:
 
 ![The Algorithm for Self-Refine](./self-refine-algo.png)
 
----
-
 ## Insights
 
 - The idea of finetuning models could be replaced by CoT and other general prompt engineering techniques, reducing training costs and maintaining model generality.
-- Self-refine steps can act as a chain of thoughts for reasoning tasks.
-- Reasoning in natural language improves model performance due to the prevalence of natural language in LLM training data.
 
----
+- Self-refine steps can act as a chain of thoughts for reasoning tasks.
+
+- Reasoning in natural language improves model performance due to the prevalence of natural language in LLM training data.
 
 ## References
 
