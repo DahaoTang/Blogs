@@ -32,12 +32,7 @@ export default async function BlogPost({ params }: { params: Params }) {
 
     return (
       <div>
-        <div>
-          <div className="text-xl font-bold">Dahao&apos;s Blog</div>
-          <div className="pt-5 pb-5">
-            <Headbar />
-          </div>
-        </div>
+        <Headbar />
         <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
       </div>
     );

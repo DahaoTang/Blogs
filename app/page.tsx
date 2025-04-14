@@ -46,10 +46,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="text-xl font-bold">Dahao&apos;s Blog</div>
-      <div className="pt-5 pb-5">
-        <Headbar />
-      </div>
+      <Headbar />
       <div>
         <ul className="space-y-2">
           {blogPosts.map((post) => {
@@ -62,10 +59,7 @@ export default function Home() {
             return (
               <li key={`${post.id}-${post.name}`}>
                 {day} {monthName}, {year} &nbsp;&nbsp;
-                <Link
-                  href={`/blog/${post.id}/`}
-                  className="text-blue-600"
-                >
+                <Link href={`/blog/${post.id}/`} className="text-blue-600">
                   {displayName}
                 </Link>
               </li>
