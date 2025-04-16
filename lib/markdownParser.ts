@@ -1,152 +1,101 @@
-/**
- * ========== IMPORTANT ==========
- * BE CAREFUL WHEN CHANGING THE ORDER OF THE RENDERING!!!
- * ===============================
- */
-export function parseMarkdown(md: string, baseUrl: string = ""): string {
-  let html = md;
+import katex from "katex";
+import "katex/dist/katex.min.css";
 
-  // 1. Escape HTML characters to prevent XSS
-  html = html
+/**
+ * Escape HTML special characters to prevent injection in non-math content
+ * @param text - The input markdown string
+ * @returns - Sanitized string
+ */
+function escapeHtml(text: string): string {
+  return text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+    .replace(/`/g, "&#96;");
+}
 
-  // 2. Headings
-  html = html.replace(
-    /^###### (.*)$/gim,
-    `<div class="heading heading-6 text-base font-semibold my-2">$1</div>`
-  );
-  html = html.replace(
-    /^##### (.*)$/gim,
-    `<div class="heading heading-5 text-md font-bold my-2">$1</div>`
-  );
-  html = html.replace(
-    /^#### (.*)$/gim,
-    `<div class="heading heading-4 text-lg font-semibold my-3">$1</div>`
-  );
-  html = html.replace(
-    /^### (.*)$/gim,
-    `<div class="heading heading-3 text-lg font-bold my-3">$1</div>`
-  );
-  html = html.replace(
-    /^## (.*)$/gim,
-    `<div class="heading heading-2 text-xl font-semibold my-4">$1</div>`
-  );
-  html = html.replace(
-    /^# (.*)$/gim,
-    `<div class="heading heading-1 text-2xl font-bold my-4">$1</div>`
-  );
+/**
+ * This function renders latex syntax formula in the browser: inline math
+ * @param latex - LaTeX syntax string
+ * @returns - Rendered result
+ */
+function renderInlineMath(latex: string): string {
+  try {
+    return katex.renderToString(latex, {
+      throwOnError: false,
+      displayMode: false,
+    });
+  } catch (err) {
+    console.warn("KaTeX rendering error:", err);
+    return escapeHtml(latex);
+  }
+}
 
-  // 3. Bold and Italic
-  html = html.replace(
-    /\*\*(.*?)\*\*/gim,
-    `<strong class="font-bold">$1</strong>`
-  );
-  html = html.replace(/\_(.*?)\_/gim, `<em class="italic">$1</em>`);
+/**
+ *  This function renders latex syntax formula in the browser: math block
+ * @param latex - LaTeX syntax string
+ * @returns - Rendered result
+ */
+function renderBlockMath(latex: string): string {
+  try {
+    return katex.renderToString(latex, {
+      throwOnError: false,
+      displayMode: true,
+    });
+  } catch (err) {
+    console.warn("KaTeX block rendering error:", err);
+    return `<pre class="text-red-600 bg-red-100 p-2 rounded">Invalid math: ${escapeHtml(
+      latex
+    )}</pre>`;
+  }
+}
 
-  // 4. Horizontal Rules
-  html = html.replace(/^\s*([-_*]){3,}\s*$/gm, '<hr class="my-4" />');
-
-  // 5. Code Blocks
-  html = html.replace(
-    /```([\s\S]*?)```/g,
-    (match: string, codeBody: string): string => {
-      // Split into lines
-      let lines: string[] = codeBody.split("\n");
-
-      // Remove any leading/trailing blank lines
-      while (lines.length && lines[0].trim() === "") {
-        lines.shift();
-      }
-      while (lines.length && lines[lines.length - 1].trim() === "") {
-        lines.pop();
-      }
-
-      // If the first line is a language marker (no spaces), remove it
-      if (
-        lines.length > 1 &&
-        lines[0].trim().length > 0 &&
-        lines[0].trim().indexOf(" ") === -1
-      ) {
-        lines.shift();
-      } else if (lines.length === 1) {
-        // For a single-line code block, check if the first token is a marker.
-        const tokens = codeBody.split(" ");
-        if (tokens.length > 1 && tokens[0].trim().indexOf(" ") === -1) {
-          tokens.shift();
-          lines = [tokens.join(" ")];
-        }
-      }
-
-      // Dedent:
-      //  - Skip lines that are empty or only punctuation like `)`, `}`, `]`
-      //    to avoid them forcing minIndent=0.
-      const isOnlyClosingPunctuation = (s: string) =>
-        /^[)\]}]+$/.test(s.trim());
-      const dedentCandidates = lines.filter(
-        (l) => l.trim() !== "" && !isOnlyClosingPunctuation(l)
-      );
-
-      if (dedentCandidates.length > 0) {
-        // Find the minimum leading space among dedent candidates
-        const indentLengths = dedentCandidates.map((line) => {
-          const matchIndent = line.match(/^\s+/);
-          return matchIndent ? matchIndent[0].length : 0;
-        });
-        const minIndent = Math.min(...indentLengths);
-
-        // Remove that indentation from each line
-        if (minIndent > 0) {
-          lines = lines.map((line) => line.slice(minIndent));
-        }
-      }
-
-      // Join lines with <br /> to preserve newlines (including empty lines)
-      const codeContent: string = lines.join("<br />");
-
-      // 2. Do not render inline code markers inside code block - replace backticks with the HTML entity.
-      const codeContentEscaped = codeContent.replace(/`/g, "&#96;");
-
-      // 3. Render with horizontal scrolling and copy button moved above the code block.
-      // Note: The copy button script now fetches the code block from the nextElementSibling.
-      return `
-        <div class="code-block-container my-4">
-          <div class="text-right mt-1">
-            <button
-              class="copy-btn text-xs text-white border rounded px-2 py-1 mb-1
-                    border-neutral-500 bg-neutral-500 hover:border-neutral-900
-                    hover:bg-neutral-900 hover:text-green-600 cursor-pointer"
-              onclick="(async function(el){
-                try {
-                  const codeEl = el.parentElement.nextElementSibling.querySelector('code');
-                  const codeText = codeEl ? codeEl.innerText : '';
-                  await navigator.clipboard.writeText(codeText);
-                  el.innerText='copied';
-                  setTimeout(() => { el.innerText='copy'; }, 2000);
-                } catch(err) {
-                  console.error(err);
-                  el.innerText='error';
-                }
-              })(this)"
-            >
-              copy
-            </button>
-          </div>
-          <pre class="code-block bg-neutral-800 text-neutral-100 p-2 rounded overflow-x-auto"><code class="code-content font-mono text-sm">${codeContentEscaped}</code></pre>
-        </div>
-      `.trim();
+/**
+ * This function handles single-line format
+ * @param text - The markdown line
+ * @returns The formatted line
+ */
+function processLine(text: string, baseUrl: string): string {
+  // Headings
+  const headingMatch = text.match(/^(#{1,6})\s+(.*)$/);
+  if (headingMatch) {
+    const level = headingMatch[1].length;
+    const content = headingMatch[2].trim();
+    if (level === 1) {
+      text = `<div class="text-2xl font-bold my-4">${escapeHtml(
+        content
+      )}</div>`;
+    } else {
+      text = `<div class="text-xl font-semibold my-4">${escapeHtml(
+        content
+      )}</div>`;
     }
+  }
+
+  // Horizontal line: ---
+  if (text === "---")
+    return `<hr class="w-full h-px border-0 bg-neutral-300 my-4"/>\n`;
+
+  // Bold formatting: **[bolded text]**
+  text = text.replace(
+    /\*\*(.+?)\*\*/g,
+    (_, p1) => `<strong>${escapeHtml(p1)}</strong>`
   );
 
-  // 6. Inline Code
-  html = html.replace(
-    /`([^`]+)`/g,
-    '<code class="inline-code bg-green-100 text-green-800 px-1 py-0.5 rounded whitespace-pre align-baseline">$1</code>'
-  );
+  // Italic formatting: _[italic text]_
+  text = text.replace(/_(.+?)_/g, (_, p1) => `<em>${escapeHtml(p1)}</em>`);
 
-  // 7. Images
-  html = html.replace(
+  // Inline code: `[inline code]`
+  text = text.replace(/`(.+?)`/g, (_, p1) => {
+    return `<code class='px-1 rounded-sm bg-neutral-300 font-mono'>${escapeHtml(
+      p1
+    )}</code>`;
+  });
+
+  // Process images: ![alt text](URL)
+  text = text.replace(
     /!\[([^\]]*)\]\((.*?)\)/gim,
     (match: string, alt: string, src: string): string => {
       let finalSrc = src.trim();
@@ -154,49 +103,132 @@ export function parseMarkdown(md: string, baseUrl: string = ""): string {
         finalSrc = finalSrc.slice(2);
         finalSrc = baseUrl.replace(/\/$/, "") + "/" + finalSrc;
       }
-      return `<img src="${finalSrc}" alt="${alt}" class="img-responsive max-w-full h-auto" />`;
+      return `<img src="${escapeHtml(finalSrc)}" alt="${escapeHtml(
+        alt
+      )}" class="img-responsive ml-auto mr-auto max-w-[80%] h-auto my-4" />`;
     }
   );
 
-  // 8. Links
-  html = html.replace(
-    /\[([^\]]+)\]\((.*?)\)/gim,
-    `<a href="$2" class="link text-blue-600" target="_blank">$1</a>`
+  // Process links: [link text](URL)
+  text = text.replace(
+    /\[([^\]]+)\]\(([^)]+)\)/g,
+    (match: string, text: string, href: string): string => {
+      return `<a class="text-blue-600" href="${escapeHtml(href)}">${escapeHtml(
+        text
+      )}</a>`;
+    }
   );
 
-  // 9. Block-level Processing
-  html = html
-    .split(/\n\s*\n/)
-    .map((block: string) => {
-      const trimmed = block.trim();
-      if (trimmed === "") {
-        return "<br />";
+  // Inline math: $...$
+  text = text.replace(/\$(.+?)\$/g, (_, expr) => renderInlineMath(expr.trim()));
+
+  return text;
+}
+
+// =======================
+// ===== Main Parser =====
+// =======================
+/**
+ * Main markdown parser
+ * @param md - The input markdown string
+ * @param baseUrl - Links/Address to the resources
+ * @returns - The generated HTML
+ */
+export function parseMarkdown(md: string, baseUrl: string = ""): string {
+  const lines = md.split("\n");
+  let i = 0;
+  let html = "";
+
+  while (i < lines.length) {
+    let line = lines[i];
+
+    // ----- Block-based Process -----
+
+    // Unordered List
+    if (/^\s*[-*+]\s+/.test(line)) {
+      while (i < lines.length && /^\s*[-*+]\s+/.test(lines[i])) {
+        const match = lines[i].match(/^(\s*)([-*+])\s+(.*)/);
+        if (match) {
+          const indent = match[1].length;
+          const level = Math.min(Math.floor(indent / 2), 2); // Max 3 levels
+          const margin = 16 + level * 16;
+          const bullets = ["&bull;", "&#9702;", "&#9642;"];
+          const bullet = bullets[level] || "&bull;";
+          html += `<div style="margin-left: ${margin}px">${bullet} ${processLine(
+            match[3],
+            baseUrl
+          )}</div>\n`;
+        }
+        i++;
       }
-      if (
-        /^(<div class="heading"|<div class="code-block-container"|<pre class="code-block"|<hr|<ul |<ol |<img |<a |<p)/.test(
-          trimmed
-        )
-      ) {
-        return trimmed;
+      continue;
+    }
+
+    // Ordered List
+    if (/^\s*\d+\.\s+/.test(line)) {
+      while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) {
+        const match = lines[i].match(/^(\s*)(\d+)\.\s+(.*)/);
+        if (match) {
+          const indent = match[1].length;
+          const level = Math.floor(indent / 2);
+          const margin = 16 + level * 16;
+          html += `<div style="margin-left: ${margin}px">${
+            match[2]
+          }. ${processLine(match[3], baseUrl)}</div>\n`;
+        }
+        i++;
       }
-      // Check for list blocks
-      const lines: string[] = trimmed.split("\n").map((line) => line.trim());
-      if (lines.every((line) => /^([-+*]|\d+\.)\s+/.test(line))) {
-        const listItems = lines.map((line) => {
-          return `<li class="ml-4">${line
-            .replace(/^([-+*]|\d+\.)\s+/, "")
-            .trim()}</li>`;
-        });
-        return /^\d+\./.test(lines[0])
-          ? `<ol class="list-decimal ml-4">${listItems.join("")}</ol>`
-          : `<ul class="list-disc ml-4">${listItems.join("")}</ul>`;
+      continue;
+    }
+
+    // Code Block
+    if (line.startsWith("```")) {
+      html += `<div class="p-2 rounded-md bg-neutral-300 my-4">`;
+      const language = line.slice(3).trim();
+      i++;
+      const codeLines: string[] = [];
+      while (i < lines.length && !lines[i].startsWith("```")) {
+        codeLines.push(lines[i]);
+        i++;
       }
-      // Normal paragraph
-      let normalized = trimmed.replace(/  \n/g, "<br />");
-      normalized = normalized.replace(/\n/g, " ");
-      return `<p class="paragraph break-word my-2">${normalized}</p>`;
-    })
-    .join("");
+      i++; // Skip closing ```
+      const codeContent = codeLines.join("\n");
+      html += `<pre class="overflow-x-auto whitespace-pre"><code${
+        language ? ` class="language-${language}"` : ""
+      }>${escapeHtml(codeContent)}</code></pre></div>\n`;
+      continue;
+    }
+
+    // Block Math: $$...$$
+    if (line.trim().startsWith("$$")) {
+      let latexContent = line.trim().slice(2); // Remove leading $$
+      i++;
+      while (i < lines.length && !lines[i].trim().startsWith("$$")) {
+        latexContent += "\n" + lines[i];
+        i++;
+      }
+      if (i < lines.length && lines[i].trim().startsWith("$$")) {
+        latexContent += "\n" + lines[i].trim().slice(2); // Append closing $$
+        i++; // skip closing line
+      }
+      html += `<div class="my-4">${renderBlockMath(
+        latexContent.trim()
+      )}</div>\n`;
+      continue;
+    }
+
+    // Line-based content
+    if (line.trim() !== "") {
+      const content = processLine(line.trim(), baseUrl);
+      html += `<div>${content}</div>\n`;
+    } else if (i > 0 && lines[i - 1] === "") {
+      html += `<br />\n`;
+    }
+
+    i++;
+  }
+
+  html = `<div class="break-word">${html}</div>`;
 
   return html.trim();
 }
