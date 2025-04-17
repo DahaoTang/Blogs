@@ -26,26 +26,26 @@ Block-based content is a bit more complex yet still easy to understand and imple
 
 ```sudo
 while (i < file length) {
-	
+
 	# Do block-based process
 	...
-	
+
 	# Code block: ```<optional: language><code content, usually multiple lines>```
 	while (within the code block) {
 		Do some line-base processes with different patterns than outside this sub-loop
-		
+
 		i++; # This is almost certainly be used as we are inside a sub-loop
 	...
 	}
-	
+
 	# Do line-based process
 	...
-	
+
 	i++;
 }
 ```
 
-`i++` is almost guaranteed to be used within the sub-loop. Because once the lines within the block are processed, you don’t want to process it again using a single line-based process. 
+`i++` is almost guaranteed to be used within the sub-loop. Because once the lines within the block are processed, you don’t want to process it again using a single line-based process.
 
 Hence the major difference between the two categories, in terms of implementation, is whether the pointer $i$ is toggled when processing the content (single line or multiple lines).
 
@@ -78,12 +78,15 @@ Some text for Heading 1
 # Heading 2
 
 Some text for Heading 2
+
 # Heading 3
 
 Some text for Heading 3
+
 # Heading 4
 
 Some text for Heading 4
+
 # Heading 5
 
 Some text for Heading 5
@@ -117,7 +120,6 @@ This is a sorted list:
       1. you
       2. and
          1. me
-
 
 This is an unsorted list:
 
@@ -156,6 +158,7 @@ if (line.startsWith("```")) {
 ```
 
 This is a math block:
+
 $$
 f(x) =
 \begin{cases}
