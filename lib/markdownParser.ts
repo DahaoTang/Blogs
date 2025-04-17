@@ -57,18 +57,28 @@ function renderBlockMath(latex: string): string {
  * @param text - The markdown line
  * @returns The formatted line
  */
-function processLine(text: string, baseUrl: string): string {
+function processLine(text: string): string {
   // Headings
   const headingMatch = text.match(/^(#{1,6})\s+(.*)$/);
   if (headingMatch) {
     const level = headingMatch[1].length;
     const content = headingMatch[2].trim();
     if (level === 1) {
-      text = `<div class="text-2xl font-bold my-4">${escapeHtml(
+      text = `<div class="text-2xl font-bold my-2">${escapeHtml(
         content
       )}</div>`;
+    } else if (level == 2) {
+      text = `<div class="text-xl font-bold my-2">${escapeHtml(content)}</div>`;
+    } else if (level == 3) {
+      text = `<div class="text-l font-bold my-2">${escapeHtml(content)}</div>`;
+    } else if (level == 4) {
+      text = `<div class="text-l font-semibold my-2">${escapeHtml(
+        content
+      )}</div>`;
+    } else if (level == 5) {
+      text = `<div class="text-md font-bold my-2">${escapeHtml(content)}</div>`;
     } else {
-      text = `<div class="text-xl font-semibold my-4">${escapeHtml(
+      text = `<div class="text-md font-semibold my-2">${escapeHtml(
         content
       )}</div>`;
     }
@@ -98,12 +108,7 @@ function processLine(text: string, baseUrl: string): string {
   text = text.replace(
     /!\[([^\]]*)\]\((.*?)\)/gim,
     (match: string, alt: string, src: string): string => {
-      let finalSrc = src.trim();
-      if (finalSrc.startsWith("./") && baseUrl !== "") {
-        finalSrc = finalSrc.slice(2);
-        finalSrc = baseUrl.replace(/\/$/, "") + "/" + finalSrc;
-      }
-      return `<img src="${escapeHtml(finalSrc)}" alt="${escapeHtml(
+      return `<img src="${escapeHtml(src.trim())}" alt="${escapeHtml(
         alt
       )}" class="img-responsive ml-auto mr-auto max-w-[80%] h-auto my-4" />`;
     }
@@ -131,10 +136,9 @@ function processLine(text: string, baseUrl: string): string {
 /**
  * Main markdown parser
  * @param md - The input markdown string
- * @param baseUrl - Links/Address to the resources
  * @returns - The generated HTML
  */
-export function parseMarkdown(md: string, baseUrl: string = ""): string {
+export default function parseMarkdown(md: string): string {
   const lines = md.split("\n");
   let i = 0;
   let html = "";
@@ -150,13 +154,13 @@ export function parseMarkdown(md: string, baseUrl: string = ""): string {
         const match = lines[i].match(/^(\s*)([-*+])\s+(.*)/);
         if (match) {
           const indent = match[1].length;
-          const level = Math.min(Math.floor(indent / 2), 2); // Max 3 levels
+          const level = Math.floor(indent / 2);
           const margin = 16 + level * 16;
           const bullets = ["&bull;", "&#9702;", "&#9642;"];
+          const symbolLevel = Math.max(level, 2);
           const bullet = bullets[level] || "&bull;";
           html += `<div style="margin-left: ${margin}px">${bullet} ${processLine(
-            match[3],
-            baseUrl
+            match[3]
           )}</div>\n`;
         }
         i++;
@@ -174,7 +178,7 @@ export function parseMarkdown(md: string, baseUrl: string = ""): string {
           const margin = 16 + level * 16;
           html += `<div style="margin-left: ${margin}px">${
             match[2]
-          }. ${processLine(match[3], baseUrl)}</div>\n`;
+          }. ${processLine(match[3])}</div>\n`;
         }
         i++;
       }
@@ -219,9 +223,9 @@ export function parseMarkdown(md: string, baseUrl: string = ""): string {
 
     // Line-based content
     if (line.trim() !== "") {
-      const content = processLine(line.trim(), baseUrl);
+      const content = processLine(line.trim());
       html += `<div>${content}</div>\n`;
-    } else if (i > 0 && lines[i - 1] === "") {
+    } else {
       html += `<br />\n`;
     }
 

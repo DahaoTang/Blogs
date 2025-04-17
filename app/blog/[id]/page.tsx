@@ -1,37 +1,59 @@
 import fs from "fs";
 import path from "path";
 import { notFound } from "next/navigation";
-import { parseMarkdown } from "../../../lib/markdownParser";
 import Headbar from "../../components/headbar";
+import parseMarkdown from "../../../lib/markdownParser";
 
-export default async function BlogPost({ params }: { params: { id: string } }) {
+interface BlogPageProps {
+  // params is now a Promise of an object with id
+  params: Promise<{ id: string }>;
+}
+
+// Generate static paths for all blog posts
+export async function generateStaticParams() {
+  const blogDir = path.join(process.cwd(), "public", "blog");
+  const folders = fs
+    .readdirSync(blogDir, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
+
+  return folders.map((id) => ({ id }));
+}
+
+export default async function Page({ params }: BlogPageProps) {
+  // await the params Promise before destructuring
   const { id } = await params;
 
-  // Get the path to the folder of the blog
-  const blogFolder = path.join(process.cwd(), "public", "blog", id);
-  if (!fs.existsSync(blogFolder)) {
-    notFound();
+  // FInd blog folder
+  const postDir = path.join(process.cwd(), "public", "blog", id);
+  if (!fs.existsSync(postDir)) {
+    return notFound();
   }
 
-  // Get the markdown file of the blog
-  const mdFile = fs
-    .readdirSync(blogFolder, { withFileTypes: true })
-    .find((file) => file.isFile() && file.name.endsWith(".md"));
+  // Find blog markdown file
+  const files = fs.readdirSync(postDir);
+  const mdFile = files.find((file) => file.endsWith(".md"));
   if (!mdFile) {
-    notFound();
+    return notFound();
   }
 
-  // Get meta data
-  const name = mdFile.name.replace(/\.md$/, "");
-  const mdPath = path.join(blogFolder, mdFile.name);
-  const markdownContent = fs.readFileSync(mdPath, "utf-8");
-  const baseUrl = `/blog/${id}/${name}.assets/`;
-  const htmlContent = parseMarkdown(markdownContent, baseUrl);
+  // Read markdown content
+  const fullPath = path.join(postDir, mdFile);
+  const content = fs.readFileSync(fullPath, "utf8");
+
+  // Convert markdown to HTML
+  const rawHtml = parseMarkdown(content);
+
+  // Prefix any relative resource links (images, media) to point under /blog/[id]/
+  const html = rawHtml.replace(
+    /src="(?!https?:\/\/|\/)([^"]+)"/g,
+    (_, p1) => `src="/blog/${id}/${p1}"`
+  );
 
   return (
     <div>
       <Headbar />
-      <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+      <article dangerouslySetInnerHTML={{ __html: html }} />
     </div>
   );
 }

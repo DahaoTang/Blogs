@@ -23,6 +23,7 @@ I rewatched [Andrew’s talk at Sequoia](https://www.youtube.com/watch?v=sal78AC
 CoT combines two key ideas to unlock reasoning abilities in LLMs:
 
 1. Generating step-by-step natural language rationales improves reasoning tasks.
+
 2. In-context few-shot learning allows task demonstrations without finetuning a separate model.
 
 CoT overcomes these limitations:
@@ -44,8 +45,11 @@ Self-Refine generates an initial output with an LLM, then uses the same LLM to p
 Steps:
 
 1. Generate an initial output.
+
 2. Use the same model for feedback on the output.
+
 3. Refine the output based on feedback.
+
 4. Repeat until no further refinement is needed or a maximum number of iterations is reached.
 
 Key considerations:
