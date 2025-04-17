@@ -18,7 +18,7 @@ export default function About() {
         >
           Archive
         </a>{" "}
-        (raw markdonw on GitHub)
+        (raw markdown on GitHub)
       </div>
     </div>
   );

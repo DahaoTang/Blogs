@@ -137,7 +137,7 @@ This is an inline code: `printf("Welcome to my personal blog!\n");`
 
 This is an inline math: $x_{i}^{2} + \frac{1}{2}$
 
-This is inline code with tricky content: `**bold** _italic_ $x_2$ --- [text](link) ![image](address) - 1.`
+This is an inline code with tricky content: `**bold** _italic_ $x_2$ --- [text](link) ![image](address) - 1.`
 
 This is a code block:
 
