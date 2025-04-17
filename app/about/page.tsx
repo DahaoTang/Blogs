@@ -11,6 +11,15 @@ export default function About() {
         </a>
         &apos;s personal blog website. Started April 2025.
       </div>
+      <div className="pt-2">
+        <a
+          className="text-blue-600"
+          href="https://github.com/DahaoTang/Blogs/tree/main/public/archive"
+        >
+          Archive
+        </a>{" "}
+        (raw markdonw on GitHub)
+      </div>
     </div>
   );
 }
