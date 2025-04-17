@@ -1,4 +1,3 @@
-// markdown_parser.js
 import katex from "katex";
 import "katex/dist/katex.min.css";
 
@@ -150,9 +149,6 @@ function processLine(text: string): string {
   return text;
 }
 
-// =======================
-// ===== Main Parser =====
-// =======================
 /**
  * Main markdown parser
  * @param md - The input markdown string
