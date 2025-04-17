@@ -12,7 +12,7 @@ I have always wanted a personal blog website built with the minimum packages and
 
 ## Tech Stack
 
-This blog website you are looking at is built upon **Next.js 15** using Tailwind and TypeScript, which are both embedded as options for modern Next.js applications. The only additional package used is **[KaTex](https://katex.org/)**, a package that quickly renders a LaTeX-syntax formula in modern browsers. _I wanted to build the customized formula renderer, yet it soon came to me that it is a huge amount of work that clearer too much for a small personal side project._
+This blog website you are looking at is built upon **Next.js** 15 using Tailwind and TypeScript, which are both embedded as options for modern Next.js applications. The only additional package used is **[KaTex](https://katex.org/)**, a package that quickly renders a LaTeX-syntax formula in modern browsers. _I wanted to build the customized formula renderer, yet it soon came to me that it is a huge amount of work that clearly was too much for a small personal side project._
 
 ## Technical Core
 
@@ -20,7 +20,7 @@ The core of this website is a [markdown parser](https://github.com/DahaoTang/Blo
 
 I treat the markdown content as two main categories: **line-based** and **block-based**.
 
-Line-based contents are simple: like regular text, headings, bold text, italic text, etc These are easy to implement: simply try to match the markdown syntax and use HTML to do the rendering. For instance, for bolded text, check if the current line matches the expression of `**<some content>**`; if so, convert the line into HTML: `<strong>${some content}</strong>`. Additional styling/formatting, like margin or padding, can be added as required.
+Line-based contents are simple: like regular text, headings, bold text, italic text, etc. These are easy to implement: simply try to match the markdown syntax and use HTML to do the rendering. For instance, for bolded text, check if the current line matches the expression of `**<some content>**`; if so, convert the line into HTML: `<strong>${some content}</strong>`. Additional styling/formatting, like margin or padding, can be added as required.
 
 Block-based content is a bit more complex yet still easy to understand and implement. Imagine using a simple while/for loop and a pointer $i$ to represent and control where you are in the markdown file; in practice, this is how I implement the parser as well. For block-based content, you are expected to take a portion of content (several lines usually) as a whole and **toggle** the pointer $i$ **within** the several lines of content, which intuitively involves a sub-while/for loop:
 
