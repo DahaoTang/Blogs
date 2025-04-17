@@ -1,3 +1,4 @@
+// markdown_parser.js
 import katex from "katex";
 import "katex/dist/katex.min.css";
 
@@ -11,7 +12,7 @@ function escapeHtml(text: string): string {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
+    .replace(/\"/g, "&quot;")
     .replace(/'/g, "&#39;")
     .replace(/`/g, "&#96;");
 }
@@ -34,7 +35,7 @@ function renderInlineMath(latex: string): string {
 }
 
 /**
- *  This function renders latex syntax formula in the browser: math block
+ * This function renders latex syntax formula in the browser: math block
  * @param latex - LaTeX syntax string
  * @returns - Rendered result
  */
@@ -58,35 +59,52 @@ function renderBlockMath(latex: string): string {
  * @returns The formatted line
  */
 function processLine(text: string): string {
+  // Extract inline code to placeholders
+  const codeArr: string[] = [];
+  text = text.replace(/`(.+?)`/g, (_m, code) => {
+    const idx = codeArr.length;
+    codeArr.push(code);
+    return `@@CODE${idx}@@`;
+  });
+
+  // Extract inline math to placeholders
+  const mathArr: string[] = [];
+  text = text.replace(/\$(.+?)\$/g, (_m, expr) => {
+    const idx = mathArr.length;
+    mathArr.push(expr);
+    return `@@MATH${idx}@@`;
+  });
+
   // Headings
   const headingMatch = text.match(/^(#{1,6})\s+(.*)$/);
   if (headingMatch) {
     const level = headingMatch[1].length;
     const content = headingMatch[2].trim();
     if (level === 1) {
-      text = `<div class="text-2xl font-bold my-2">${escapeHtml(
+      return `<div class="text-2xl font-bold my-2">${escapeHtml(
         content
       )}</div>`;
-    } else if (level == 2) {
-      text = `<div class="text-xl font-bold my-2">${escapeHtml(content)}</div>`;
-    } else if (level == 3) {
-      text = `<div class="text-l font-bold my-2">${escapeHtml(content)}</div>`;
-    } else if (level == 4) {
-      text = `<div class="text-l font-semibold my-2">${escapeHtml(
+    } else if (level === 2) {
+      return `<div class="text-xl font-bold my-2">${escapeHtml(content)}</div>`;
+    } else if (level === 3) {
+      return `<div class="text-l font-bold my-2">${escapeHtml(content)}</div>`;
+    } else if (level === 4) {
+      return `<div class="text-l font-semibold my-2">${escapeHtml(
         content
       )}</div>`;
-    } else if (level == 5) {
-      text = `<div class="text-md font-bold my-2">${escapeHtml(content)}</div>`;
+    } else if (level === 5) {
+      return `<div class="text-md font-bold my-2">${escapeHtml(content)}</div>`;
     } else {
-      text = `<div class="text-md font-semibold my-2">${escapeHtml(
+      return `<div class="text-md font-semibold my-2">${escapeHtml(
         content
       )}</div>`;
     }
   }
 
   // Horizontal line: ---
-  if (text === "---")
-    return `<hr class="w-full h-px border-0 bg-neutral-300 my-4"/>\n`;
+  if (text === "---") {
+    return `<hr class="w-full h-px border-0 bg-neutral-300 my-4"/>`;
+  }
 
   // Bold formatting: **[bolded text]**
   text = text.replace(
@@ -97,35 +115,37 @@ function processLine(text: string): string {
   // Italic formatting: _[italic text]_
   text = text.replace(/_(.+?)_/g, (_, p1) => `<em>${escapeHtml(p1)}</em>`);
 
-  // Inline code: `[inline code]`
-  text = text.replace(/`(.+?)`/g, (_, p1) => {
-    return `<code class='px-1 rounded-sm bg-neutral-300 font-mono'>${escapeHtml(
-      p1
-    )}</code>`;
+  // Process images: ![alt text](URL)
+  text = text.replace(/!\[([^\]]*)\]\((.*?)\)/g, (_m, alt, src) => {
+    return `<img src="${escapeHtml(src.trim())}" alt="${escapeHtml(
+      alt
+    )}" class="img-responsive ml-auto mr-auto max-w-[80%] h-auto my-4" />`;
   });
 
-  // Process images: ![alt text](URL)
-  text = text.replace(
-    /!\[([^\]]*)\]\((.*?)\)/gim,
-    (match: string, alt: string, src: string): string => {
-      return `<img src="${escapeHtml(src.trim())}" alt="${escapeHtml(
-        alt
-      )}" class="img-responsive ml-auto mr-auto max-w-[80%] h-auto my-4" />`;
-    }
-  );
-
   // Process links: [link text](URL)
-  text = text.replace(
-    /\[([^\]]+)\]\(([^)]+)\)/g,
-    (match: string, text: string, href: string): string => {
-      return `<a class="text-blue-600" href="${escapeHtml(href)}">${escapeHtml(
-        text
-      )}</a>`;
-    }
-  );
+  text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, txt, href) => {
+    return `<a class="text-blue-600" href="${escapeHtml(href)}">${escapeHtml(
+      txt
+    )}</a>`;
+  });
 
-  // Inline math: $...$
-  text = text.replace(/\$(.+?)\$/g, (_, expr) => renderInlineMath(expr.trim()));
+  // Restore code placeholders
+  codeArr.forEach((code, idx) => {
+    text = text.replace(
+      new RegExp(`@@CODE${idx}@@`, "g"),
+      `<code class='px-1 rounded-sm bg-neutral-300 font-mono'>${escapeHtml(
+        code
+      )}</code>`
+    );
+  });
+
+  // Restore math placeholders
+  mathArr.forEach((expr, idx) => {
+    text = text.replace(
+      new RegExp(`@@MATH${idx}@@`, "g"),
+      renderInlineMath(expr.trim())
+    );
+  });
 
   return text;
 }
@@ -157,7 +177,6 @@ export default function parseMarkdown(md: string): string {
           const level = Math.floor(indent / 2);
           const margin = 16 + level * 16;
           const bullets = ["&bull;", "&#9702;", "&#9642;"];
-          const symbolLevel = Math.max(level, 2);
           const bullet = bullets[level] || "&bull;";
           html += `<div style="margin-left: ${margin}px">${bullet} ${processLine(
             match[3]
@@ -223,8 +242,7 @@ export default function parseMarkdown(md: string): string {
 
     // Line-based content
     if (line.trim() !== "") {
-      const content = processLine(line.trim());
-      html += `<div>${content}</div>\n`;
+      html += `<div>${processLine(line.trim())}</div>\n`;
     } else {
       html += `<br />\n`;
     }

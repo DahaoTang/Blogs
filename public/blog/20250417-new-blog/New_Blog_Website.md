@@ -24,7 +24,7 @@ Line-based contents are simple: like regular text, headings, bold text, italic t
 
 Block-based content is a bit more complex yet still easy to understand and implement. Imagine using a simple while/for loop and a pointer $i$ to represent and control where you are in the markdown file; in practice, this is how I implement the parser as well. For block-based content, you are expected to take a portion of content (several lines usually) as a whole and **toggle** the pointer $i$ **within** the several lines of content, which intuitively involves a sub-while/for loop:
 
-```
+````
 while (i < file length) {
 
 	# Do block-based processes
@@ -43,7 +43,7 @@ while (i < file length) {
 
 	i++;
 }
-```
+````
 
 `i++` is almost guaranteed to be used within the sub-loop. Because once the lines within the block are processed, you don’t want to process them again using a single line-based process.
 
@@ -135,9 +135,11 @@ This is an inline code: `printf("Welcome to my personal blog!\n");`
 
 This is an inline math: $x_{i}^{2} + \frac{1}{2}$
 
+This is inline code with tricky content: `**bold** _italic_ $x_2$ --- [text](link) ![image](address) - 1.`
+
 This is a code block:
 
-```
+````
 // Code Block
 if (line.startsWith("```")) {
   html += `<div class="p-2 rounded-md bg-neutral-300 my-4">`;
@@ -155,7 +157,7 @@ if (line.startsWith("```")) {
   }>${escapeHtml(codeContent)}</code></pre></div>\n`;
   continue;
 }
-```
+````
 
 This is a math block:
 
