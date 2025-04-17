@@ -80,21 +80,23 @@ function processLine(text: string): string {
     const level = headingMatch[1].length;
     const content = headingMatch[2].trim();
     if (level === 1) {
-      return `<div class="text-2xl font-bold my-2">${escapeHtml(
+      return `<div class="text-2xl font-bold my-4">${escapeHtml(
         content
       )}</div>`;
     } else if (level === 2) {
-      return `<div class="text-xl font-bold my-2">${escapeHtml(content)}</div>`;
+      return `<div class="text-xl font-bold mt-4 mb-3">${escapeHtml(
+        content
+      )}</div>`;
     } else if (level === 3) {
-      return `<div class="text-l font-bold my-2">${escapeHtml(content)}</div>`;
+      return `<div class="text-l font-bold my-3">${escapeHtml(content)}</div>`;
     } else if (level === 4) {
-      return `<div class="text-l font-semibold my-2">${escapeHtml(
+      return `<div class="text-l font-semibold mt-3 mb-2">${escapeHtml(
         content
       )}</div>`;
     } else if (level === 5) {
       return `<div class="text-md font-bold my-2">${escapeHtml(content)}</div>`;
     } else {
-      return `<div class="text-md font-semibold my-2">${escapeHtml(
+      return `<div class="text-md font-semibold mt-2 mb-1">${escapeHtml(
         content
       )}</div>`;
     }
