@@ -33,6 +33,7 @@ while (i < file length) {
 	# Code block: ```<optional: language><code content, usually multiple lines>```
 	while (within the code block) {
 		Do some line-based processes with different patterns than outside this sub-loop
+    ...
 
 		i++;
 	...
