@@ -99,9 +99,9 @@ Horizontal line:
 
 ---
 
-This is a **Bold text**.
+This is a **Bold text**
 
-This is an _Italic text_.
+This is an _Italic text_
 
 This is a **_Bold italic text_**. Note: _** italic bold text**_ doesn’t work
 
