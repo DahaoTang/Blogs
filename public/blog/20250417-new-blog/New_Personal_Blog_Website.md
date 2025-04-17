@@ -67,7 +67,9 @@ Currently, only the following Markdown syntax is implemented:
 - Code block
 - Math block
 
-## Test
+---
+
+# Test
 
 The following is a simple test of the implementation, as this blog is written in Markdown as well.
 
