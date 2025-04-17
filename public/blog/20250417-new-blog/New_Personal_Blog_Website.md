@@ -12,7 +12,7 @@ I have always wanted a personal blog website built with the minimum packages and
 
 ## Tech Stack
 
-This blog website you are looking at is built upon **Next.js** 15 using Tailwind and TypeScript, which are both embedded as options for modern Next.js applications. The only additional package used is **[KaTex](https://katex.org/)**, a package that quickly renders a LaTeX-syntax formula in modern browsers. _I wanted to build the customized formula renderer, yet it soon came to me that it is a huge amount of work that clearly was too much for a small personal side project._
+This blog website you are looking at is built upon **Next.js** 15 using Tailwind and TypeScript, which are both embedded as options for modern Next.js applications. The only additional package used is **[KaTex](https://katex.org/)**, a package that quickly renders a LaTeX-syntax formula in modern browsers. _I wanted to build the customized formula renderer, yet it soon came to me that it clearly was too much for a small personal side project._
 
 ## Technical Core
 
@@ -34,7 +34,7 @@ while (i < file length) {
 	while (within the code block) {
 		Do some line-based processes with different patterns than outside this sub-loop
 
-		i++; # This is almost certainly used as we are inside a sub-loop
+		i++;
 	...
 	}
 
