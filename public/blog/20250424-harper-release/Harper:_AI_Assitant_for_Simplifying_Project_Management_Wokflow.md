@@ -11,7 +11,7 @@ Let me introduce [Harper](https://github.com/DahaoTang/Harper), an AI assistant 
 The inspiration came from a simple but powerful idea:
 “Develop for develop” — how can we create something now that makes future development smoother?
 
-Let’s be honest: building a brand new tool always sounds more exciting than improving an existing one. But we’ve learned to approach those ideas carefully. Still, it’s always worth asking: `Is there something we can build to just make life easier?`
+Let’s be honest: building a brand new tool always sounds more exciting than improving an existing one. But we’ve learned to approach those ideas carefully. Still, it’s always worth asking: _Is there something we can build to just make life easier?_
 
 The answer is obviously “Yes!”. The question is “What?”.
 
