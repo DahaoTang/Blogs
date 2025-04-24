@@ -31,9 +31,7 @@ If we take a closer look at the time we spend on each of these tools, the answer
 
 And yet, we know project boards are important — they get mentioned in every Agile class for a reason. Not because it’s trendy, but because once a project grows, having a board isn’t enough. Using it properly becomes critical.
 
-So we asked:
-_Why don’t we use Trello/Linear?_
-Or better: **_How can we make it easier to use?_**
+So we asked: _Why don’t we use Trello/Linear?_ Or better: **_How can we make it easier to use?_**
 
 ## What if we could use Trello/Linear through Slack?
 
