@@ -3,14 +3,23 @@ import "katex/dist/katex.min.css";
 
 /**
  * Escape HTML special characters to prevent injection in non-math content
- * @param text - The input markdown string
+ * @param text - The input string
+ * @param options - Configuration options for escaping
  * @returns - Sanitized string
  */
-function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
+function escapeHtml(text: string, options = { skipTags: false }): string {
+  if (!text) return "";
+
+  // Always escape & first to avoid double-escaping
+  let result = text.replace(/&/g, "&amp;");
+
+  // Conditional escaping for HTML tags
+  if (!options.skipTags) {
+    result = result.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  // Always escape these characters
+  return result
     .replace(/\"/g, "&quot;")
     .replace(/'/g, "&#39;")
     .replace(/`/g, "&#96;");
@@ -55,9 +64,10 @@ function renderBlockMath(latex: string): string {
 /**
  * This function handles single-line format
  * @param text - The markdown line
+ * @param options - Formatting options
  * @returns The formatted line
  */
-function processLine(text: string): string {
+function processLine(text: string, options = { allowHtml: false }): string {
   // Extract inline code to placeholders
   const codeArr: string[] = [];
   text = text.replace(/`(.+?)`/g, (_m, code) => {
@@ -74,30 +84,46 @@ function processLine(text: string): string {
     return `@@MATH${idx}@@`;
   });
 
+  // Extract potential HTML if allowed
+  const htmlArr: string[] = [];
+  if (options.allowHtml) {
+    text = text.replace(/<([^>]+)>/g, (_m, html) => {
+      const idx = htmlArr.length;
+      htmlArr.push(html);
+      return `@@HTML${idx}@@`;
+    });
+  }
+
   // Headings
   const headingMatch = text.match(/^(#{1,6})\s+(.*)$/);
   if (headingMatch) {
     const level = headingMatch[1].length;
     const content = headingMatch[2].trim();
     if (level === 1) {
-      return `<div class="text-2xl font-bold my-4">${escapeHtml(
-        content
-      )}</div>`;
+      return `<div class="text-2xl font-bold my-4">${escapeHtml(content, {
+        skipTags: options.allowHtml,
+      })}</div>`;
     } else if (level === 2) {
-      return `<div class="text-xl font-bold mt-4 mb-3">${escapeHtml(
-        content
-      )}</div>`;
+      return `<div class="text-xl font-bold mt-4 mb-3">${escapeHtml(content, {
+        skipTags: options.allowHtml,
+      })}</div>`;
     } else if (level === 3) {
-      return `<div class="text-l font-bold my-3">${escapeHtml(content)}</div>`;
+      return `<div class="text-l font-bold my-3">${escapeHtml(content, {
+        skipTags: options.allowHtml,
+      })}</div>`;
     } else if (level === 4) {
       return `<div class="text-l font-semibold mt-3 mb-2">${escapeHtml(
-        content
+        content,
+        { skipTags: options.allowHtml }
       )}</div>`;
     } else if (level === 5) {
-      return `<div class="text-md font-bold my-2">${escapeHtml(content)}</div>`;
+      return `<div class="text-md font-bold my-2">${escapeHtml(content, {
+        skipTags: options.allowHtml,
+      })}</div>`;
     } else {
       return `<div class="text-md font-semibold mt-2 mb-1">${escapeHtml(
-        content
+        content,
+        { skipTags: options.allowHtml }
       )}</div>`;
     }
   }
@@ -110,11 +136,15 @@ function processLine(text: string): string {
   // Bold formatting: **[bolded text]**
   text = text.replace(
     /\*\*(.+?)\*\*/g,
-    (_, p1) => `<strong>${escapeHtml(p1)}</strong>`
+    (_, p1) =>
+      `<strong>${escapeHtml(p1, { skipTags: options.allowHtml })}</strong>`
   );
 
   // Italic formatting: _[italic text]_
-  text = text.replace(/_(.+?)_/g, (_, p1) => `<em>${escapeHtml(p1)}</em>`);
+  text = text.replace(
+    /_(.+?)_/g,
+    (_, p1) => `<em>${escapeHtml(p1, { skipTags: options.allowHtml })}</em>`
+  );
 
   // Process images: ![alt text](URL)
   text = text.replace(/!\[([^\]]*)\]\((.*?)\)/g, (_m, alt, src) => {
@@ -126,7 +156,8 @@ function processLine(text: string): string {
   // Process links: [link text](URL)
   text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, txt, href) => {
     return `<a class="text-blue-600" href="${escapeHtml(href)}">${escapeHtml(
-      txt
+      txt,
+      { skipTags: options.allowHtml }
     )}</a>`;
   });
 
@@ -148,21 +179,56 @@ function processLine(text: string): string {
     );
   });
 
+  // Restore HTML placeholders if allowed
+  if (options.allowHtml) {
+    htmlArr.forEach((html, idx) => {
+      text = text.replace(new RegExp(`@@HTML${idx}@@`, "g"), `<${html}>`);
+    });
+  }
+
   return text;
 }
 
 /**
  * Main markdown parser
  * @param md - The input markdown string
+ * @param options - Parser options
  * @returns - The generated HTML
  */
-export default function parseMarkdown(md: string): string {
+export default function parseMarkdown(
+  md: string,
+  options = { allowHtml: false }
+): string {
   const lines = md.split("\n");
   let i = 0;
   let html = "";
 
   while (i < lines.length) {
     let line = lines[i];
+
+    // Allow HTML passthrough if enabled
+    if (
+      options.allowHtml &&
+      line.trim().startsWith("<") &&
+      !line.trim().startsWith("```")
+    ) {
+      let htmlBlock = line;
+      i++;
+
+      // Collect HTML block lines until a closing tag pattern is detected
+      const openingTag = line.trim().match(/<([a-z][a-z0-9]*)/i)?.[1];
+      if (openingTag) {
+        const closingPattern = new RegExp(`</${openingTag}>`, "i");
+
+        while (i < lines.length && !closingPattern.test(htmlBlock)) {
+          htmlBlock += "\n" + lines[i];
+          i++;
+        }
+      }
+
+      html += `${htmlBlock}\n`;
+      continue;
+    }
 
     // ----- Block-based Process -----
 
@@ -177,7 +243,8 @@ export default function parseMarkdown(md: string): string {
           const bullets = ["&bull;", "&#9702;", "&#9642;"];
           const bullet = bullets[level] || "&bull;";
           html += `<div style="margin-left: ${margin}px">${bullet} ${processLine(
-            match[3]
+            match[3],
+            options
           )}</div>\n`;
         }
         i++;
@@ -195,7 +262,7 @@ export default function parseMarkdown(md: string): string {
           const margin = 16 + level * 16;
           html += `<div style="margin-left: ${margin}px">${
             match[2]
-          }. ${processLine(match[3])}</div>\n`;
+          }. ${processLine(match[3], options)}</div>\n`;
         }
         i++;
       }
@@ -240,7 +307,7 @@ export default function parseMarkdown(md: string): string {
 
     // Line-based content
     if (line.trim() !== "") {
-      html += `<div>${processLine(line.trim())}</div>\n`;
+      html += `<div>${processLine(line.trim(), options)}</div>\n`;
     } else {
       html += `<br />\n`;
     }
