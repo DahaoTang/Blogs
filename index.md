@@ -1,6 +1,6 @@
 # Dahao’s Blog
 
-[About](./about.html) [Blog](./index.html)
+[About](./about.html)
 
 2025 Apr 27 [New Blog From Typora](./blog/20250427-typora-web)
 
