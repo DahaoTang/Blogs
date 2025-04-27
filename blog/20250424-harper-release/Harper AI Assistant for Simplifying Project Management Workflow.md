@@ -1,5 +1,7 @@
 # Harper: AI Assistant for Simplifying Project Management Workflow
 
+[Home](../../main.html)
+
 April 24
 
 **TL;DR:** Meet Harper — an AI assistant designed to simplify project management workflows. Born from real needs during the ProteHome project at USYD’s David James Lab, Harper helps bridge communication and task-tracking by integrating project boards with Slack. This post covers the origin story, basic use cases, and a peek into the core technical folder structure.
