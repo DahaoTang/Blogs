@@ -1,6 +1,6 @@
 # Dahao’s Blog - About
 
-[About](./about.html) 	[Blog](./main.html)
+[About](./about.html) 	[Blog](./index.html)
 
 This is [Dahao](https://dahaotang.com/)'s personal blog website. Started April 27 2025. The current version is built using pure HTML files generated from Markdown files using Typora (with pandoc). 
 

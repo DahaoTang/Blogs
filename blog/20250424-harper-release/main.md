@@ -1,6 +1,6 @@
 # Harper: AI Assistant for Simplifying Project Management Workflow
 
-[Home](../../main.html)
+[Home](../../index.html)
 
 April 24
 
