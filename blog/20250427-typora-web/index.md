@@ -2,7 +2,7 @@
 
 [Home](../../index.html)
 
-April 27, 2025
+Initial start: April 27, 2025; Last update: May 5, 2025
 
 **TL;DR** The current version of my blog website is built upon static HTML files. These HTML files are generated from Markdown files using Typora. The old blog website with a customized parser can still be found [here](https://github.com/DahaoTang/Blogs/blob/customized-markdown-parser-archive/lib/markdownParser.ts).
 

@@ -2,7 +2,7 @@
 
 [Home](../../index.html)
 
-Initial start: May 4, 2025; Last updated: May 4, 2025
+Initial start: May 4, 2025; Last update: May 4, 2025
 
 ## Introduction
 
