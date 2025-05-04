@@ -1,4 +1,4 @@
-# My Native Experience with Researching
+# My Naive Experience with Researching
 
 [Home](../../index.html)
 
