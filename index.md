@@ -2,7 +2,7 @@
 
 [About](./about.html)
 
-2025 May 21 	[Train NN with Lambda Cloud](./blog/20250521-lambda-cloud-guide/index.html)
+2025 May 21	[Train NN with Lambda Cloud](./blog/20250521-lambda-cloud-guide/index.html)
 
 2025 May  4 	[My Experience with Research: A Self-Reminder](./blog/20250504-research-experience/index.html)
 
