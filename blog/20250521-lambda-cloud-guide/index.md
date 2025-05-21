@@ -8,12 +8,12 @@ May 21
 
 - Launch and manage instances and storages on the Lambda Cloud platform
 - Use Pipenv as the kernel for the Jupyter Notebook
-- Large file transfermation
+- Large file transfer
 - Conclusion
 
 ## Launch an Instance
 
-First, register and log in to the [Lambda Cloud website](https://lambda.ai/). 
+First, register and log in to the [Lambda Cloud website](https://lambda.ai/).
 
 ### Add SSH Key to the Platform
 
@@ -71,7 +71,7 @@ As I am more used to using Pipenv to create the environment, I will show how to 
 
 We will be able to access the file system, which is a Ubuntu distribution, by starting the terminal in a new notebook tab. Or we can also access the file system (essentially a server when attached to a running instance) using the command `ssh ubuntu@<some_id_here>`. You can find the command under “SSH LOGIN” in the instance page.
 
-By default, Python is installed. We can install pipenv using the following command: 
+By default, Python is installed. We can install pipenv using the following command:
 
 ```sh
 pip install --user pipenv
@@ -140,7 +140,7 @@ Then we can select the newly created kernel for the Jupyter Notebook. Simply the
 
 So that we can use the kernel created from the Pipenv virtual environment for the Jupyter Notebook.
 
-## File Transfermation
+## File Transfer
 
 We need to do bi-directional file transfer: from the local machine to the instance and from the instance to the local machine, because we want to at least:
 
@@ -165,7 +165,7 @@ scp <path_to_the_folder_on_local_machine> ubuntu@<some_id_here>:<path_to_the_fol
 
 But I recommend compressing the folder into a `tar.gz` file and transferring it. Because for a typical training and testing dataset, each folder/subfolder will contain a large number of small files. Transferring as a folder may be significantly slower than transferring a file.
 
-It is a bit more complex to transfer from the server/storage/instance to your local machine. 
+It is a bit more complex to transfer from the server/storage/instance to your local machine.
 
 You should first get your current public IP address through the command:
 
@@ -207,7 +207,7 @@ We can also upload and download files from Cloud Storage Providers like Google D
 
 In this post, I will focus on downloading files ONLY.
 
-To download a file from Google Drive,  we first go to Google Drive and find the file we want to download to the server/instance/storage. Click on the three-dot button at the top right corner of the file and click on “Share”.
+To download a file from Google Drive, we first go to Google Drive and find the file we want to download to the server/instance/storage. Click on the three-dot button at the top right corner of the file and click on “Share”.
 
 ![image-20250521233157084](./index.assets/image-20250521233157084.png)
 
@@ -242,7 +242,7 @@ To upload a file from the server/local machine to Google Drive, you can use `gdr
 
 ### Other Options
 
-You may choose other options for file Transfermations, for instance, using GitHub, using another Cloud Storage Providers like Dropbox.
+You may choose other options for file Transfer, for instance, using GitHub, using another Cloud Storage Providers like Dropbox.
 
 But you should be aware of the limitations of your choice. For example, GitHub doesn’t support large files (over 50MB) for the regular/free personal plan, and Dropbox has a storage limitation of 2 GB.
 
