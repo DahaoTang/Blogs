@@ -27,7 +27,7 @@ Finally, save the public SSH key in the platform.
 
 ### Instances and Storage
 
-On Lambda Cloud, the computing service can be done through different methods. One common way is to use an **instance** which can be thought of as _one (long) shot of computing power_. Please note that once you start an instance, you cannot pause it — you will be charged for ALL the time the instance is on. If you want to “pause” or stop being charged, you should terminate the instance and start another one when needed.
+On Lambda Cloud, the computing service can be done through different methods. One common way is to use an **instance** which can be thought of as _one (long) shot of computing power_. Please note that, once you start an instance, you cannot pause it — **_you will be charged for ALL the time the instance is on._** If you want to “pause” or stop being charged, you should terminate the instance and start another one when needed.
 
 On the other hand, **storage** is more than a “storage”; it is essentially a file system (Ubuntu) that can only be accessed when being attached to an instance _within the same region_. The settings and files stored on the storage will be preserved even if the storage is not attached to any instances. In this manner, you won’t need to re-set up the environment each time you restart an instance – you only need to attach the desired storage to the new instance.
 
