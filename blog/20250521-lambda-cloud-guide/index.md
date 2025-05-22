@@ -91,7 +91,7 @@ pipenv shell
 
 <img src="./index.assets/image-20250521230348491.png" alt="image-20250521230348491" style="zoom:67%;" />
 
-Pipenv Package Installation
+### Pipenv Package Installation
 
 Upon building the virtual environment, a Pipfile will be created, which serves as the `requirements.txt`. Implement the file as needed, e.g.:
 
