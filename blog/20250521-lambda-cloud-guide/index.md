@@ -23,7 +23,7 @@ To generate an SSH key on your local machine, execute the command `ssh-keygen` i
 
 Finally, save the public SSH key in the platform.
 
-![image-20250521214756703](./index.assets/image-20250521214756703.png)
+<img src="./index.assets/image-20250521214756703.png" alt="image-20250521214756703" style="zoom: 33%;" />
 
 ### Instances and Storage
 
@@ -37,27 +37,27 @@ With that being said, Lambda Cloud still serves as a strong interface for access
 
 To start/launch an instance, simply click the “Launch Instance” button at the top right corner:
 
-![image-20250521225334610](./index.assets/image-20250521225334610.png)
+<img src="./index.assets/image-20250521225334610.png" alt="image-20250521225334610" style="zoom: 25%;" />
 
 You will see the current availability of all the GPUs provided — just choose one that matches your needs.
 
-![image-20250521224739306](./index.assets/image-20250521224739306.png)
+<img src="./index.assets/image-20250521224739306.png" alt="image-20250521224739306" style="zoom: 50%;" />
 
 Upon selecting the GPU, you will select the region available. Again, make your pick. If you already have a storage that you want to attach to this instance, choose the region where the storage is at at this step. If there is no shared region, you can only create a new storage or change to another instance type.
 
-![image-20250521224801901](./index.assets/image-20250521224801901.png)
+<img src="./index.assets/image-20250521224801901.png" alt="image-20250521224801901" style="zoom:50%;" />
 
 Then you will be asked to either create a new storage or attach an existing storage to the instance. You may also choose not to attach any storages, but this is highly NOT recommended.
 
-![image-20250521224828113](./index.assets/image-20250521224828113.png)
+<img src="./index.assets/image-20250521224828113.png" alt="image-20250521224828113" style="zoom:50%;" />
 
 Finally, you will be asked to choose the SSH key — just choose the one you have just uploaded to the platform, or any other one you want to upload and use now.
 
-![image-20250521224959599](./index.assets/image-20250521224959599.png)
+<img src="./index.assets/image-20250521224959599.png" alt="image-20250521224959599" style="zoom:50%;" />
 
 You will see an instance booting upon clicking the “Launch instance” button. It may take up 20 minutes to boot (for real). _Sometimes, you will see the instance status become “Alert”, as far as I know and experience, this happens to one of the single-A100 options, you can/should terminate the instance and start a new one._
 
-![Screenshot 2025-05-21 at 21.34.14](./index.assets/Screenshot%202025-05-21%20at%2021.34.14.png)
+<img src="./index.assets/Screenshot%202025-05-21%20at%2021.34.14.png" alt="Screenshot 2025-05-21 at 21.34.14" style="zoom:25%;" />
 
 When the status becomes “Running”, you can click the blue “Launch” text under “CLOUD IDE” to start the Jupyter Notebook service.
 
@@ -89,7 +89,7 @@ We can then create/start the Pipenv virtual environment through the command:
 pipenv shell
 ```
 
-![image-20250521230348491](./index.assets/image-20250521230348491.png)
+<img src="./index.assets/image-20250521230348491.png" alt="image-20250521230348491" style="zoom:67%;" />
 
 Pipenv Package Installation
 
@@ -136,7 +136,7 @@ python -m ipykernel install --user --name=<name_of_the_virtual_environment> --di
 
 Then we can select the newly created kernel for the Jupyter Notebook. Simply the “Kernel” button in the headbar or clicking the current kernel at the top right corner, and choose the kernel we just created.
 
-![Screenshot 2025-05-21 at 19.38.09](./index.assets/Screenshot%202025-05-21%20at%2019.38.09.png)
+<img src="./index.assets/Screenshot%202025-05-21%20at%2019.38.09.png" alt="Screenshot 2025-05-21 at 19.38.09" style="zoom:33%;" />
 
 So that we can use the kernel created from the Pipenv virtual environment for the Jupyter Notebook.
 
@@ -175,7 +175,7 @@ curl -s https://api.ipify.org
 
 Then do the port mapping. Go to http://192.168.1.1/ in your browser to access the router management panel. You should find the user and password from the physical router device. Then you should add a port mapping (same meaning but may be in other expressions…): choose `2220` as the external port and `22` as the internal port for your local device. Here is an example of using a Vodafone router:
 
-![image-20250521235051881](./index.assets/image-20250521235051881.png)
+<img src="./index.assets/image-20250521235051881.png" alt="image-20250521235051881" style="zoom: 33%;" />
 
 Then you can transfer from the server/storage/instance to your local machine using the command:
 
@@ -209,11 +209,11 @@ In this post, I will focus on downloading files ONLY.
 
 To download a file from Google Drive, we first go to Google Drive and find the file we want to download to the server/instance/storage. Click on the three-dot button at the top right corner of the file and click on “Share”.
 
-![image-20250521233157084](./index.assets/image-20250521233157084.png)
+<img src="./index.assets/image-20250521233157084.png" alt="image-20250521233157084" style="zoom: 50%;" />
 
 Then we need to make sure “Anyone with the link” is selected for the General Access.
 
-![image-20250521233230060](./index.assets/image-20250521233230060.png)
+<img src="./index.assets/image-20250521233230060.png" alt="image-20250521233230060" style="zoom:67%;" />
 
 Finally, click “Copy Link” to get the link to the file, which typically follows the following syntax:
 
