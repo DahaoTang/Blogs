@@ -102,8 +102,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-ipykernel = "*"
-jupyter = "*"
 numpy = "*"
 opencv-python = "*"
 pillow = "*"
@@ -128,7 +126,13 @@ You can also execute the command `pipenv --venv` to get the path to the virtual 
 /Users/youruser/.local/share/virtualenvs/<name_of_the_virtual_environment>
 ```
 
-We will then need to create a kernel based on the virtual environment:
+We first install the dependencies for creating the kernel for Jupyter Notebook:
+
+```sh
+pip install ipykernel IPython
+```
+
+Then we create/install a kernel based on the virtual environment:
 
 ```sh
 python -m ipykernel install --user --name=<name_of_the_virtual_environment> --display-name "<name_of_the_kernel>"
@@ -225,11 +229,10 @@ Note that we can get the file ID of the file on Google Drive.
 
 We use `gdown` to download the file from the Google Drive to the server/storage/instance.
 
-To install `gdown`, we should update the package manager on Ubuntu and install the package:
+We first install `gdown` using `pip`:
 
 ```sh
-sudo apt update
-sudo apt install -y gdown
+pip install gdown
 ```
 
 Upon completion of installation, we can use the command and the file ID of the file on the Google Drive to download:
